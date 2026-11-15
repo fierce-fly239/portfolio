@@ -83,7 +83,20 @@ a {
 .hero-text {
     flex: 1;
     max-width: 600px;
-    animation: hero-in 0.8s ease-out 0.2s backwards;
+}
+
+/* Staggered entry (LAB 8, 29 October 2026): each part of the hero fades in from
+   below one after the other, using the delay value of the animation shorthand */
+.hero-text .kicker {
+    animation: hero-in 0.8s ease-out 0.1s backwards;
+}
+
+.hero-text h1 {
+    animation: hero-in 0.8s ease-out 0.3s backwards;
+}
+
+.hero-text p {
+    animation: hero-in 0.8s ease-out 0.5s backwards;
 }
 
 @keyframes hero-in {
@@ -125,10 +138,12 @@ a {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+    animation: hero-in 0.8s ease-out 0.7s backwards;
 }
 
 .hero-img {
     flex-shrink: 0;
+    animation: hero-in 0.8s ease-out 0.9s backwards;
 }
 
 .hero-img img {
