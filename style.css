@@ -1,5 +1,6 @@
 /* Only HTML and CSS taught in Web Development 1 is used here. See taught.md */
 /* Navbar glass blur, button lift and flex-shrink on the photo: from LAB 6 (Portfolio-3). */
+/* Staggered hero entry: from LAB 8 (Portfolio-4). Bars that grow from 0 to their width: from LAB 9 (Portfolio-5). */
 
 :root {
     --bg: #0f172a;
@@ -83,7 +84,27 @@ a {
 .hero-text {
     flex: 1;
     max-width: 600px;
+}
+
+/* Hero appears one piece at a time: staggered animation-delay, from LAB 8 (Portfolio-4, 29 Oct). */
+.hero .kicker {
+    animation: hero-in 0.8s ease-out 0s backwards;
+}
+
+.hero-text h1 {
     animation: hero-in 0.8s ease-out 0.2s backwards;
+}
+
+.hero-text p {
+    animation: hero-in 0.8s ease-out 0.4s backwards;
+}
+
+.hero-buttons {
+    animation: hero-in 0.8s ease-out 0.6s backwards;
+}
+
+.hero-img {
+    animation: hero-in 0.8s ease-out 0.8s backwards;
 }
 
 @keyframes hero-in {
