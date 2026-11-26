@@ -191,6 +191,58 @@ function startLoop() {
 }
 startLoop();
 
+// ---------- Learning: semester tabs, and only one month open at a time ----------
+(function learningTabs() {
+    const wrap = document.querySelector('.timeline-sems');
+    if (!wrap) return;
+    const sems = Array.from(wrap.querySelectorAll('.timeline-sem'));
+
+    // each month shows how many subjects it covers
+    wrap.querySelectorAll('details.timeline-item').forEach((month) => {
+        const n = month.querySelectorAll('.subjects > li').length;
+        const summary = month.querySelector('summary');
+        if (n && summary && !summary.querySelector('.month-count')) {
+            const count = document.createElement('span');
+            count.className = 'month-count';
+            count.textContent = n + (n === 1 ? ' subject' : ' subjects');
+            summary.appendChild(count);
+        }
+        // opening one month closes the others in the same semester
+        // (the name attribute does this in new browsers; this covers older ones)
+        month.addEventListener('toggle', () => {
+            if (!month.open) return;
+            month.parentElement.querySelectorAll('details.timeline-item[open]').forEach((other) => {
+                if (other !== month) other.open = false;
+            });
+        });
+    });
+
+    const bar = document.createElement('div');
+    bar.className = 'sem-tabs';
+    bar.setAttribute('role', 'tablist');
+    const tabs = sems.map((sem, i) => {
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = 'sem-tab';
+        tab.setAttribute('role', 'tab');
+        tab.textContent = sem.dataset.label || ('Semester ' + (i + 1));
+        tab.addEventListener('click', () => show(i));
+        bar.appendChild(tab);
+        return tab;
+    });
+    wrap.insertBefore(bar, wrap.firstChild);
+    wrap.classList.add('has-tabs');
+
+    function show(index) {
+        sems.forEach((sem, i) => {
+            sem.hidden = i !== index;
+            tabs[i].setAttribute('aria-selected', i === index ? 'true' : 'false');
+        });
+    }
+    // open on the newest semester
+    show(sems.length - 1);
+})();
+
 // ---------- Semester bars worked out live from the academic calendar ----------
 // The dates live in index.html (data-semesters on .degree), copied only from Vedam's official
 // academic calendar. Each new yearly calendar adds two semesters there; nothing is guessed.

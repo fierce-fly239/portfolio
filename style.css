@@ -897,6 +897,104 @@ html.js .achievement {
     color: var(--muted);
 }
 
+
+/* Learning: semester tabs, then months that open one at a time */
+.sem-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 26px;
+}
+
+.sem-tab {
+    font-family: var(--pixel);
+    font-size: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sem-tab:hover {
+    color: var(--text);
+}
+
+.sem-tab[aria-selected="true"] {
+    color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: var(--glow);
+}
+
+.sem-heading {
+    font-family: var(--pixel);
+    font-size: 12px;
+    color: var(--accent);
+    margin: 10px 0 20px;
+}
+
+html.js .has-tabs .sem-heading {
+    display: none; /* the tabs already name the semester */
+}
+
+.timeline-sem[hidden] {
+    display: none;
+}
+
+details.timeline-item {
+    margin-bottom: 18px;
+}
+
+details.timeline-item > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+    padding: 6px 0;
+}
+
+details.timeline-item > summary::-webkit-details-marker {
+    display: none;
+}
+
+details.timeline-item > summary .date {
+    margin-bottom: 0;
+}
+
+.month-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.month-count {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+details.timeline-item > summary::after {
+    content: "\25B8"; /* small arrow, turns when open */
+    margin-left: auto;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+}
+
+details.timeline-item[open] > summary::after {
+    transform: rotate(90deg);
+}
+
+details.timeline-item > summary:hover .month-title {
+    color: var(--accent);
+}
+
+details.timeline-item[open] > .subjects {
+    margin: 12px 0 10px;
+}
+
 /* Phones and small tablets */
 @media (max-width: 860px) {
     .navbar {
