@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vrishank Kuthiala | Portfolio</title>
+    <title>Vrishank | Portfolio</title>
+    <meta name="description" content="Vrishank: CS student at Vedam School of Technology. Websites, Python tools and apps, most of them real work for real businesses.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
+    <div class="xp-bar" aria-hidden="true"><span></span></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+
     <header class="navbar">
-        <a href="#home" class="logo">MyPortfolio</a>
+        <a href="#home" class="logo">V<span>.</span></a>
         <nav>
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#learning">Learning</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#about"><span>01</span>About</a></li>
+                <li><a href="#skills"><span>02</span>Skills</a></li>
+                <li><a href="#experience"><span>03</span>Experience</a></li>
+                <li><a href="#projects"><span>04</span>Projects</a></li>
+                <li><a href="#stats"><span>05</span>Stats</a></li>
+                <li><a href="#learning"><span>06</span>Learning</a></li>
+                <li><a href="#contact"><span>&rarr;</span>Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
 
-        <!-- Hero -->
+        <!-- Start screen -->
         <section id="home" class="hero">
-            <div class="hero-text">
+            <canvas id="hero-canvas" aria-hidden="true"></canvas>
+            <div class="hero-inner">
                 <p class="kicker">CS student at Vedam School of Technology</p>
-                <h1>Hi, I'm <span>Vrishank Kuthiala</span></h1>
-                <p>I build websites, Python tools and small apps. Most of what's on this page
+                <h1 class="hero-name" aria-label="Vrishank"><span class="letter">V</span><span class="letter">R</span><span class="letter">I</span><span class="letter">S</span><span class="letter">H</span><span class="letter">A</span><span class="letter">N</span><span class="letter">K</span></h1>
+                <p class="hero-sub">I build websites, Python tools and small apps. Most of what's on this page
                    is real work for real businesses: live client websites, an online shop and
                    a hackathon project.</p>
                 <div class="hero-buttons">
@@ -37,15 +47,19 @@
                     <a href="Vrishank-Kuthiala-Portfolio.pdf" class="btn btn-outline" download>Download Full Portfolio (PDF)</a>
                 </div>
             </div>
-            <div class="hero-img">
-                <img src="images/vrishank.png" alt="Photo of Vrishank Kuthiala" width="300" height="300">
-            </div>
+            <a href="#about" class="press-start">PRESS START &darr;</a>
         </section>
 
-        <!-- About -->
-        <section id="about" class="section">
-            <h2 class="section-title">About <span>Me</span></h2>
-            <div class="about-box">
+        <!-- Level 01: About -->
+        <section id="about" class="section level">
+            <div class="level-tag" aria-hidden="true"><span>LEVEL</span>01</div>
+            <div class="level-body">
+                <h2 class="section-title">About <span>Me</span></h2>
+                <div class="about-row">
+                    <div class="photo-ring reveal">
+                        <img src="images/vrishank-headshot.jpg" alt="Photo of Vrishank" width="800" height="800">
+                    </div>
+                    <div class="about-box reveal">
                 <p>I'm in my first semester of Computer Science at <strong>Vedam School of Technology</strong>.
                    Before college started I spent the summer as a <strong>Python intern at NXtutors</strong>,
                    an education company in Gurugram, working on their live websites. I also co-built
@@ -59,12 +73,22 @@
                 <p>I attended the <strong>Managing AI at Work and Employees as Human-Machine Hybrids</strong> masterclass by StudyIn and Lancaster University (certificate of participation, 28 October 2026).</p>
                 <p>I attended the <strong>Exploring Metamorphic Robotics and Quantum Communications</strong> masterclass by StudyIn and King's College London (certificate of participation, 17 November 2026).</p>
             </div>
+                </div>
+            </div>
         </section>
 
-        <!-- Skills -->
-        <section id="skills" class="section section-alt">
-            <h2 class="section-title">My <span>Skills</span></h2>
-            <div class="skills-row">
+        <!-- Level 02: Skills -->
+        <section id="skills" class="section section-alt level">
+            <div class="level-tag" aria-hidden="true"><span>LEVEL</span>02</div>
+            <div class="level-body">
+                <h2 class="section-title">My <span>Skills</span></h2>
+                <div class="ticker" aria-hidden="true">
+                    <div class="ticker-track">
+                        <span>Python</span><span>Java</span><span>SQL</span><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Git</span><span>Linux</span><span>Supabase</span><span>Django</span><span>React</span><span>AWS</span>
+                        <span>Python</span><span>Java</span><span>SQL</span><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Git</span><span>Linux</span><span>Supabase</span><span>Django</span><span>React</span><span>AWS</span>
+                    </div>
+                </div>
+                <div class="skills-row">
                 <div class="skill-box">
                     <h3>I write these myself</h3>
                     <ul class="skill-list">
@@ -101,12 +125,15 @@
                     </ul>
                 </div>
             </div>
+            </div>
         </section>
 
-        <!-- Experience -->
-        <section id="experience" class="section">
-            <h2 class="section-title">Work <span>Experience</span></h2>
-
+        <!-- Level 03: Experience -->
+        <section id="experience" class="section level">
+            <div class="level-tag" aria-hidden="true"><span>LEVEL</span>03</div>
+            <div class="level-body">
+                <h2 class="section-title">Work <span>Experience</span></h2>
+                <div class="jobs">
             <div class="job">
                 <div class="job-head">
                     <h3>Python Intern, NXtutors</h3>
@@ -147,12 +174,16 @@
                     <li>Set up social media for all three shops: Pinterest is live, with Instagram and TikTok in the plan and Facebook covered by cross-posting from Instagram.</li>
                 </ul>
             </div>
+                </div>
+            </div>
         </section>
 
-        <!-- Projects -->
-        <section id="projects" class="section section-alt">
-            <h2 class="section-title">My <span>Projects</span></h2>
-            <p class="section-intro">Each bar shows how far along a project is: building, then testing, then live or done.</p>
+        <!-- Level 04: Projects -->
+        <section id="projects" class="section section-alt level">
+            <div class="level-tag" aria-hidden="true"><span>LEVEL</span>04</div>
+            <div class="level-body">
+                <h2 class="section-title">My <span>Projects</span></h2>
+                <p class="section-intro">Each bar shows how far along a project is: building, then testing, then live or done.</p>
             <div class="project-row">
 
                 <div class="project-card">
@@ -273,13 +304,15 @@
                 </div>
 
             </div>
+            </div>
         </section>
 
-        <!-- Learning -->
-        <section id="learning" class="section">
-            <h2 class="section-title">Learning at <span>Vedam</span></h2>
-            <p class="section-intro">This website only uses the HTML and CSS I've learnt in class so far.
-               It grows as I learn more.</p>
+        <!-- Level 05: Stats -->
+        <section id="stats" class="section level">
+            <div class="level-tag" aria-hidden="true"><span>LEVEL</span>05</div>
+            <div class="level-body">
+                <h2 class="section-title">Player <span>Stats</span></h2>
+                <p class="section-intro">Where my degree is up to, and what I've solved on each coding site. Updated every Saturday.</p>
             <details class="degree">
                 <summary>
                     <span class="degree-text">Vedam School of Technology, BTech in CS and AI, 2026 to 2030: <strong>10% done</strong> as of 21 November</span>
@@ -318,6 +351,15 @@
                     <p>Hacker101 CTF flags captured</p>
                 </div>
             </div>
+            </div>
+        </section>
+
+        <!-- Level 06: Learning -->
+        <section id="learning" class="section section-alt level">
+            <div class="level-tag" aria-hidden="true"><span>LEVEL</span>06</div>
+            <div class="level-body">
+                <h2 class="section-title">Learning at <span>Vedam</span></h2>
+                <p class="section-intro">What I've learnt at Vedam so far, month by month.</p>
             <div class="timeline">
                 <div class="timeline-item">
                     <p class="date">November 2026</p>
@@ -337,7 +379,7 @@
                        finding elements with getElementById, and a working calculator that reads two inputs with
                        .value and Number() when a button is clicked. I wrote a quiz creator in class on 20 November:
                        it builds a question card from the form and lets you delete it again.
-                       Saving data in the browser (localStorage) comes next; until then this page stays JavaScript-free.
+                      
                        Java: linear and binary search, finding the floor of a number in a sorted array, characters and
                        ASCII (toggling case), strings (reversing, palindromes, substrings), string equality and
                        StringBuilder: removing consecutive characters and compressing a string. Then (16 to 20 November)
@@ -349,14 +391,14 @@
                     <p class="date">October 2026</p>
                     <h3>Flexbox, animation, Git and the first JavaScript</h3>
                     <p>Web Development: positioning, z-index, flexbox and media queries (this page's layout), then
-                       transform, transition and animation (the cards in Projects lift when you hover over them),
+                       transform, transition and animation,
                        and Git and GitHub for working in a team: cloning, branches, pull requests, merging, forking,
                        fixing merge conflicts, undoing commits and putting a site live with GitHub Pages.
-                       Lab: the portfolio layout, with object-fit so photos never stretch (used on my photo above),
+                       Lab: the portfolio layout, with object-fit so photos never stretch,
                        then a navbar that stays at the top with a frosted-glass blur, buttons that lift when you hover, and
-                       flex-shrink so a photo keeps its size (all three now used on this page), then (29 October) a hero
+                       flex-shrink so a photo keeps its size, then (29 October) a hero
                        that appears one piece at a time using animation-delay, and skill bars that grow from zero
-                       with @keyframes (both now used on this page: the top of this page fades in piece by piece).
+                       with @keyframes.
                        First JavaScript lesson (30 October): adding a script to a page, variables with let, console.log,
                        if/else, for and while loops and arrays. I wrote FizzBuzz and a prime-number check in class.
                        Java: ArrayList, 2D arrays and matrices (rotating, adding, subtracting and multiplying them),
@@ -375,10 +417,12 @@
                     <p>Started Computer Science at Vedam School of Technology. First HTML pages (tags, links and page structure) and first Java programs (output, variables and input).</p>
                 </div>
             </div>
+            </div>
         </section>
 
         <!-- Contact -->
-        <section id="contact" class="section section-alt">
+        <section id="contact" class="section contact">
+            <p class="continue">CONTINUE?</p>
             <h2 class="section-title">Contact <span>Me</span></h2>
             <p class="section-intro">Want to work together or ask about something here? Get in touch.</p>
             <div class="contact-links">
@@ -391,9 +435,14 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; 2026 Vrishank Kuthiala. Built with HTML and CSS from my Web Development classes.</p>
+        <p class="thanks">Thanks for playing.</p>
+        <p>&copy; 2026 Vrishank. Designed and built by me.</p>
         <p>Last updated 21 November 2026</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
