@@ -772,24 +772,26 @@ img {
     margin-bottom: 14px;
 }
 
-/* Scroll-in animation (only when JavaScript is running) */
-html.js .reveal {
+/* Scroll-in animation (only when JavaScript is running). Uses `translate`, so the
+   card tilt can keep using `transform` at the same time. */
+html.js :is(.reveal, .job, .project-card, .skill-box, .stat-box, .timeline-item, .degree, .ticker) {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    translate: 0 40px;
+    transition: opacity 0.8s ease, translate 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 0.15s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-html.js .reveal.in {
+html.js :is(.reveal, .job, .project-card, .skill-box, .stat-box, .timeline-item, .degree, .ticker).in {
     opacity: 1;
-    transform: none;
+    translate: 0 0;
 }
 
-html.js .reveal .bar-fill {
+html.js .job:not(.in) {
+    translate: -60px 0; /* jobs slide in from the side */
+}
+
+html.js :is(.project-card, .degree):not(.in) .bar-fill {
     transform: scaleX(0);
-}
-
-html.js .reveal.in .bar-fill {
-    transform: scaleX(1);
 }
 
 html.js .hero-name .letter {
@@ -878,13 +880,13 @@ html.js .hero-name .letter {
         transition: none !important;
     }
 
-    html.js .reveal,
+    html.js :is(.reveal, .job, .project-card, .skill-box, .stat-box, .timeline-item, .degree, .ticker),
     html.js .hero-name .letter {
         opacity: 1;
-        transform: none;
+        translate: 0 0;
     }
 
-    html.js .reveal .bar-fill {
+    html.js :is(.project-card, .degree):not(.in) .bar-fill {
         transform: none;
     }
 
