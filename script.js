@@ -123,7 +123,7 @@ function startLoop() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.z = 9;
+    camera.position.z = 11;
 
     // the loop: a knot drawn as glowing lines, with a cloud of dots around it
     const group = new THREE.Group();
