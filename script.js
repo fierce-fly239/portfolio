@@ -207,15 +207,52 @@ startLoop();
             count.textContent = n + (n === 1 ? ' subject' : ' subjects');
             summary.appendChild(count);
         }
-        // opening one month closes the others in the same semester
-        // (the name attribute does this in new browsers; this covers older ones)
-        month.addEventListener('toggle', () => {
-            if (!month.open) return;
-            month.parentElement.querySelectorAll('details.timeline-item[open]').forEach((other) => {
-                if (other !== month) other.open = false;
-            });
+        // The HTML's name attribute keeps one month open even without JavaScript. Here we take
+        // over so the months can slide open and shut, so the instant browser version is removed.
+        month.removeAttribute('name');
+        summary.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (month.dataset.moving) return;
+            if (month.open) {
+                slide(month, false);
+            } else {
+                month.parentElement.querySelectorAll('details.timeline-item[open]').forEach((other) => {
+                    if (other !== month) slide(other, false);
+                });
+                slide(month, true);
+            }
         });
     });
+
+    // Slide a month open or shut by animating its height; the bullets fade in as it opens.
+    function slide(month, opening) {
+        const summary = month.querySelector('summary');
+        const body = month.querySelector('.subjects');
+        if (reduceMotion || !month.animate) {
+            month.open = opening;
+            return;
+        }
+        month.dataset.moving = '1';
+        month.style.overflow = 'hidden';
+        const from = month.offsetHeight;
+        if (opening) month.open = true;
+        const to = opening ? month.offsetHeight : summary.offsetHeight;
+        const motion = month.animate(
+            [{ height: from + 'px' }, { height: to + 'px' }],
+            { duration: opening ? 420 : 320, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' }
+        );
+        if (body && opening) {
+            body.animate(
+                [{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }],
+                { duration: 380, delay: 80, easing: 'ease-out', fill: 'backwards' }
+            );
+        }
+        motion.onfinish = () => {
+            if (!opening) month.open = false;
+            month.style.overflow = '';
+            delete month.dataset.moving;
+        };
+    }
 
     const bar = document.createElement('div');
     bar.className = 'sem-tabs';
