@@ -1,0 +1,193 @@
+// Game-style effects for the portfolio. Everything here is extra: with JavaScript off,
+// the page still shows all its content (the "js" class is never added).
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+// ---------- Scroll-in reveal ----------
+const revealTargets = document.querySelectorAll(
+    '.reveal, .job, .project-card, .skill-box, .stat-box, .timeline-item, .degree, .ticker'
+);
+
+if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealTargets.forEach((el) => el.classList.add('in'));
+} else {
+    const revealer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in');
+                revealer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    // small stagger for items that sit side by side
+    revealTargets.forEach((el) => {
+        const siblings = Array.from(el.parentElement.children);
+        el.style.transitionDelay = (Math.min(siblings.indexOf(el), 5) * 0.08) + 's';
+        revealer.observe(el);
+    });
+}
+
+// ---------- Name drops in letter by letter ----------
+const letters = document.querySelectorAll('.hero-name .letter');
+if (window.gsap && !reduceMotion) {
+    gsap.fromTo(letters,
+        { y: -160, opacity: 0, rotate: () => gsap.utils.random(-25, 25) },
+        { y: 0, opacity: 1, rotate: 0, duration: 0.9, ease: 'bounce.out', stagger: 0.07, delay: 0.2 }
+    );
+    gsap.from(['.kicker', '.hero-sub', '.hero-buttons'], {
+        y: 20, opacity: 0, duration: 0.8, stagger: 0.15, delay: 0.9, ease: 'power2.out'
+    });
+} else {
+    letters.forEach((l) => { l.style.opacity = 1; });
+}
+
+// ---------- Numbers count up from 0 ----------
+function countUp(el) {
+    const target = parseInt(el.textContent, 10);
+    if (isNaN(target) || target === 0 || reduceMotion || !window.gsap) return;
+    const counter = { n: 0 };
+    gsap.to(counter, {
+        n: target,
+        duration: 1.4,
+        ease: 'power2.out',
+        onUpdate: () => { el.textContent = Math.round(counter.n); },
+        onComplete: () => { el.textContent = target; }
+    });
+}
+
+if ('IntersectionObserver' in window) {
+    const counterWatcher = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                countUp(entry.target);
+                counterWatcher.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.stat-number').forEach((el) => counterWatcher.observe(el));
+}
+
+// ---------- XP bar fills as you scroll ----------
+const xp = document.querySelector('.xp-bar span');
+function updateXp() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    xp.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', updateXp, { passive: true });
+updateXp();
+
+// ---------- Mouse effects (mouse devices only) ----------
+if (finePointer && !reduceMotion) {
+    // glowing dot
+    const dot = document.querySelector('.cursor-dot');
+    window.addEventListener('mousemove', (e) => {
+        dot.classList.add('on');
+        dot.style.transform = 'translate(' + e.clientX + 'px, ' + e.clientY + 'px)';
+    });
+    document.addEventListener('mouseleave', () => dot.classList.remove('on'));
+    document.querySelectorAll('a, button, summary, .project-card').forEach((el) => {
+        el.addEventListener('mouseenter', () => dot.classList.add('big'));
+        el.addEventListener('mouseleave', () => dot.classList.remove('big'));
+    });
+
+    // project cards tilt towards the mouse, with a shine that follows it
+    document.querySelectorAll('.project-card').forEach((card) => {
+        card.addEventListener('mousemove', (e) => {
+            const box = card.getBoundingClientRect();
+            const x = (e.clientX - box.left) / box.width;
+            const y = (e.clientY - box.top) / box.height;
+            card.style.transform = 'perspective(900px) rotateX(' + ((0.5 - y) * 12) + 'deg) rotateY(' + ((x - 0.5) * 14) + 'deg) translateY(-6px)';
+            card.style.setProperty('--mx', (x * 100) + '%');
+            card.style.setProperty('--my', (y * 100) + '%');
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+}
+
+// ---------- 3D loop on the start screen ----------
+function startLoop() {
+    const canvas = document.getElementById('hero-canvas');
+    if (!window.THREE || !canvas) return;
+
+    let renderer;
+    try {
+        renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    } catch (err) {
+        return; // no WebGL: the start screen simply has no 3D shape
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.z = 9;
+
+    // the loop: a knot drawn as glowing lines, with a cloud of dots around it
+    const group = new THREE.Group();
+    const knot = new THREE.TorusKnotGeometry(2.2, 0.55, 220, 18, 2, 3);
+    group.add(new THREE.Mesh(knot, new THREE.MeshBasicMaterial({
+        color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.22
+    })));
+    group.add(new THREE.Points(knot, new THREE.PointsMaterial({
+        color: 0x7dd3fc, size: 0.035, transparent: true, opacity: 0.9
+    })));
+
+    const starGeo = new THREE.BufferGeometry();
+    const starCount = 600;
+    const positions = new Float32Array(starCount * 3);
+    for (let i = 0; i < positions.length; i++) {
+        positions[i] = (Math.random() - 0.5) * 30;
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({
+        color: 0x94a3b8, size: 0.03, transparent: true, opacity: 0.6
+    }));
+    scene.add(stars);
+    scene.add(group);
+
+    function resize() {
+        const w = canvas.clientWidth;
+        const h = canvas.clientHeight;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        // keep the knot a sensible size on narrow phones
+        group.scale.setScalar(w < 600 ? 0.65 : 1);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // the knot turns towards the mouse
+    let targetX = 0;
+    let targetY = 0;
+    window.addEventListener('mousemove', (e) => {
+        targetX = (e.clientX / window.innerWidth - 0.5) * 1.2;
+        targetY = (e.clientY / window.innerHeight - 0.5) * 1.2;
+    });
+
+    if (reduceMotion) {
+        renderer.render(scene, camera); // one still frame
+        return;
+    }
+
+    // only animate while the start screen is on screen
+    let visible = true;
+    new IntersectionObserver((entries) => { visible = entries[0].isIntersecting; })
+        .observe(canvas);
+
+    function frame(time) {
+        requestAnimationFrame(frame);
+        if (!visible) return;
+        const t = time * 0.001;
+        group.rotation.y += (targetX + t * 0.25 - group.rotation.y) * 0.05;
+        group.rotation.x += (targetY + Math.sin(t * 0.4) * 0.2 - group.rotation.x) * 0.05;
+        stars.rotation.y = t * 0.02;
+        renderer.render(scene, camera);
+    }
+    requestAnimationFrame(frame);
+}
+startLoop();
+window.siteReady = true;

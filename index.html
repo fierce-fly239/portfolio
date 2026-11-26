@@ -9,7 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script>document.documentElement.classList.add('js');</script>
+    <script>document.documentElement.classList.add('js');
+        // if script.js never runs, show everything instead of leaving it hidden
+        setTimeout(function () { if (!window.siteReady) document.documentElement.classList.remove('js'); }, 4000);</script>
 </head>
 <body>
 
