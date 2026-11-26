@@ -6,7 +6,7 @@ const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matc
 
 // ---------- Scroll-in reveal ----------
 const revealTargets = document.querySelectorAll(
-    '.reveal, .job, .project-card, .skill-box, .stat-box, .timeline-item, .degree, .ticker'
+    '.reveal, .job, .project-card, .skill-box, .stat-box, .timeline-item, .degree, .ticker, .achievement'
 );
 
 if (reduceMotion || !('IntersectionObserver' in window)) {
@@ -190,4 +190,85 @@ function startLoop() {
     requestAnimationFrame(frame);
 }
 startLoop();
+
+// ---------- Semester bars worked out live from the academic calendar ----------
+// The dates live in index.html (data-semesters on .degree), copied only from Vedam's official
+// academic calendar. Each new yearly calendar adds two semesters there; nothing is guessed.
+(function liveSemesters() {
+    const degree = document.querySelector('.degree');
+    if (!degree || !degree.dataset.semesters) return;
+    const total = parseInt(degree.dataset.total, 10) || 8;
+    const day = 24 * 60 * 60 * 1000;
+    const now = new Date();
+    const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+        'August', 'September', 'October', 'November', 'December'];
+    function toUTC(text) {
+        const p = text.split('-');
+        return Date.UTC(+p[0], +p[1] - 1, +p[2]);
+    }
+    function nice(ms, withYear) {
+        const d = new Date(ms);
+        return d.getUTCDate() + ' ' + months[d.getUTCMonth()] + (withYear ? ' ' + d.getUTCFullYear() : '');
+    }
+
+    const sems = degree.dataset.semesters.split(';').map((row) => {
+        const p = row.split('|');
+        return { n: +p[0], start: toUTC(p[1]), end: toUTC(p[2]) };
+    });
+
+    let done = 0;
+    const rows = [];
+    let nextShown = false;
+    sems.forEach((s) => {
+        let frac;
+        if (today >= s.end) frac = 1;
+        else if (today < s.start) frac = 0;
+        else frac = (today - s.start) / (s.end - s.start);
+        done += frac;
+        if (today >= s.start) {
+            rows.push({ s: s, pct: Math.round(frac * 100) });
+        } else if (!nextShown) {
+            rows.push({ s: s, pct: 0, upcoming: true });
+            nextShown = true;
+        }
+    });
+    if (!rows.length) return;
+
+    const overall = Math.round((done / total) * 100);
+    const summary = degree.querySelector('.degree-text strong');
+    const summaryText = degree.querySelector('.degree-text');
+    const summaryBar = degree.querySelector('summary .bar-fill');
+    if (summary && summaryText) {
+        summary.textContent = overall + '% done';
+        summaryText.lastChild.textContent = ' as of today';
+    }
+    if (summaryBar) summaryBar.style.width = overall + '%';
+
+    degree.querySelectorAll('.semester').forEach((el) => el.remove());
+    rows.forEach((row) => {
+        const box = document.createElement('div');
+        box.className = 'semester';
+        const label = document.createElement('p');
+        label.textContent = 'Semester ' + row.s.n + ' (' + nice(row.s.start) + ' to ' + nice(row.s.end, true) + '): ';
+        const strong = document.createElement('strong');
+        if (row.upcoming) {
+            strong.textContent = 'starts ' + nice(row.s.start);
+            strong.className = 'upcoming';
+        } else {
+            strong.textContent = row.pct + '% done';
+        }
+        label.appendChild(strong);
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const fill = document.createElement('div');
+        fill.className = 'bar-fill';
+        fill.style.width = row.pct + '%';
+        bar.appendChild(fill);
+        box.appendChild(label);
+        box.appendChild(bar);
+        degree.appendChild(box);
+    });
+})();
+
 window.siteReady = true;
